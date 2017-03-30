@@ -1,3 +1,4 @@
+#fixed bug on single row/mapped data
 mol.sum <-
 function(mol.data, id.map, gene.annotpkg="org.Hs.eg.db", sum.method=c("sum","mean", "median", "max", "max.abs", "random")[1]){
   if(is.character(mol.data)){
@@ -23,8 +24,15 @@ function(mol.data, id.map, gene.annotpkg="org.Hs.eg.db", sum.method=c("sum","mea
   id.map=id.map[sel.idx,]
   eff.idx=gd.names %in% id.map[,1]
   mapped.ids=id.map[match(gd.names[eff.idx], id.map[,1]),2]
+  if(sum(eff.idx)<1) stop("no ID can be mapped!")
+  else if(sum(eff.idx)==1){
+    mapped.data=rbind(cbind(mol.data)[eff.idx,])
+    rownames(mapped.data)=mapped.ids[1]
+  }
+  else{
   if(sum.method %in% c("sum","mean")){
     sum.method=eval(as.name(sum.method))
+#    browser()
     mapped.data=apply(cbind(cbind(mol.data)[eff.idx,]),2,function(x){
       sum.res=tapply(x, mapped.ids, sum.method, na.rm=T)
       return(sum.res)
@@ -36,13 +44,23 @@ function(mol.data, id.map, gene.annotpkg="org.Hs.eg.db", sum.method=c("sum","mea
       vars=apply(cbind(mol.data), 1, IQR)
     } else vars=apply(cbind(mol.data), 1, sum, na.rm=T)
     
-    sel.rn=tapply(1:sum(eff.idx), mapped.ids, function(x){
+#    sel.rn=tapply(1:sum(eff.idx), mapped.ids, function(x){
+    sel.rn=tapply(which(eff.idx), mapped.ids, function(x){
       if(length(x)==1) return(x)
       else return(x[which.min(abs(vars[x]-sum.method(vars[x], na.rm=T)))])
     })
     mapped.data=cbind(mol.data[sel.rn,])
     rownames(mapped.data)=names(sel.rn)
   }
+}
+  if(length(unique(mapped.ids))==1){
+    if(length(mapped.data)>1){
+      mapped.data=rbind(mapped.data)
+      rownames(mapped.data)=mapped.ids[1]
+    }
+    else names(mapped.data)=mapped.ids[1]
+  }
   return(mapped.data)
+
 }
 
