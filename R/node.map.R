@@ -42,7 +42,7 @@ if(is.null(mol.data)){
     if(is.null(colnames(mol.data))) colnames(mol.data)=paste("ge", 1:ncol(mol.data),sep="")
     mapped.mols <- intersect(unlist(node.data$kegg.names), row.names(mol.data))
     if(length(mapped.mols)==0){
-      message("Note: ", paste("None of the genes or compounds mapped to the pathway!",
+      message("Warning: ", paste("None of the genes or compounds mapped to the pathway!",
                     "Argument gene.idtype or cpd.idtype may be wrong.", sep="\n"))
       plot.data=na.plot.data()
     } else{

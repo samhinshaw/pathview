@@ -1,4 +1,4 @@
-#fixed bug on single row/mapped data
+#fixed bug on single row/mapped data, and in mapped row numbers
 mol.sum <-
 function(mol.data, id.map, gene.annotpkg="org.Hs.eg.db", sum.method=c("sum","mean", "median", "max", "max.abs", "random")[1]){
   if(is.character(mol.data)){
