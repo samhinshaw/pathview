@@ -51,7 +51,7 @@ Weijun Luo and Cory Brouwer. Pathview: an R/Bioconductor package for pathway-bas
 
 \section{Quick start with demo data}
 \label{sec:quick}
-This is the most basic use of \Rpackage{pathview}, please check the full description below for details. Here we assume that the input data are already read in R as in the demo examples. If you are not sure how to do so, you may check \hyperref[code:readin]{Section Common uses for data visualization} or \Rpackage{gage} secondary vignette, \href{http://bioconductor.org/packages/release/bioc/vignettes/gage/inst/doc/dataPrep.pdf}{"Gene set and data preparation"}. If you have difficulties in using R in general, you may use the \href{http://pathview.uncc.edu/}{Pathview Web server}.
+This is the most basic use of \Rpackage{pathview}, please check the full description below for details. Here we assume that the input data are already read in R as in the demo examples. If you are not sure how to do so, you may check \hyperref[code:readin]{Section Common uses for data visualization} or \Rpackage{gage} secondary vignette, \href{http://bioconductor.org/packages/release/bioc/vignettes/gage/inst/doc/dataPrep.pdf}{"Gene set and data preparation"}. 
 
 <<synopsis1, echo=TRUE,  eval=FALSE>>=
 library(pathview)
@@ -59,6 +59,8 @@ data(gse16873.d)
 pv.out <- pathview(gene.data = gse16873.d[, 1], pathway.id = "04110",
                    species = "hsa", out.suffix = "gse16873")
 @ 
+
+If you have difficulties in using R in general, you may use the \href{https://pathview.uncc.edu/}{Pathview Web server: pathview.uncc.edu}. In addition to a user friendly access, \href{https://pathview.uncc.edu/}{the server} provides many extra useful features including \href{https://pathview.uncc.edu/example4}{a comprehensive pathway analysis workflow}. Please check \href{https://pathview.uncc.edu/overview}{the overview page} and \href{https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkx372}{the NAR web server paper} \citep{luo:etal:2017} for details. 
 
 \section{New features}
 \label{sec:news}
@@ -585,7 +587,7 @@ pv.out <- pathview(gene.data = ko.data, pathway.id = "04112",
 
 \section{Integrated workflow with pathway analysis}
 \label{sec:workflow}
-Although built as a stand alone program, \Rpackage{Pathview} may seamlessly integrate with pathway and functional analysis tools for large-scale and fully automated analysis pipeline. The next example shows how to connect common pathway analysis to results rendering with \Rpackage{pathview}. The pathway analysis was done using another Bioconductor package \Rpackage{gage} \citep{luo:etal:2009}, and the selected signficant pathways plus the expression data were then piped to \Rpackage{pathview} for auomated results visualization (Figure not shown).  In \Rpackage{gage} package, vignette \href{http://bioconductor.org/packages/release/bioc/vignettes/gage/inst/doc/RNA-seqWorkflow.pdf}{"RNA-Seq Data Pathway and Gene-set Analysis Workflows"} demonstrates GAGE/Pathview workflows on RNA-seq (and microarray) pathway analysis.
+Although built as a stand alone program, \Rpackage{Pathview} may seamlessly integrate with pathway and functional analysis tools for large-scale and fully automated analysis pipeline. The next example shows how to connect common pathway analysis to results rendering with \Rpackage{pathview}. The pathway analysis was done using another Bioconductor package \Rpackage{gage} \citep{luo:etal:2009}, and the selected signficant pathways plus the expression data were then piped to \Rpackage{pathview} for auomated results visualization (Figure not shown).  In \Rpackage{gage} package, vignette \href{http://bioconductor.org/packages/release/bioc/vignettes/gage/inst/doc/RNA-seqWorkflow.pdf}{"RNA-Seq Data Pathway and Gene-set Analysis Workflows"} demonstrates GAGE/Pathview workflows on RNA-seq (and microarray) pathway analysis. Note \href{https://pathview.uncc.edu/}{the Pathview Web server} provides a comprehensive workflow for both regular and integrated pathway analysis of multiple omics data \citep{luo:etal:2017}, as shown in \href{https://pathview.uncc.edu/example4}{Example 4 online}. 
 <<GAGE.Pathview.pipeline, echo=TRUE, eval=FALSE>>=
 library(gage)
 data(gse16873)
