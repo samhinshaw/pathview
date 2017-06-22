@@ -8,8 +8,12 @@ import(
 
 importFrom(png, readPNG)
 importFrom(AnnotationDbi, mget)
-importFrom(utils, data, installed.packages)
+importFrom(utils, data, installed.packages, read.delim)
 importFrom(XML, xmlAttrs, xmlChildren, xmlName, xmlRoot, xmlTreeParse)
+importFrom(grDevices, col2rgb, dev.off, pdf, png, rgb)
+importFrom(graphics, image, layout, par, polygon,
+           rasterImage, rect, segments, text)
+importFrom(stats, IQR, rnorm)
 
 export(
        download.kegg,

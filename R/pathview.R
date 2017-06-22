@@ -85,7 +85,7 @@ function(
   if(species!="ko"){
     species.data=kegg.species.code(species, na.rm=T, code.only=FALSE)
   } else {
-    species.data=c(kegg.code="ko", entrez.gnodes="0", kegg.geneid="K01488", ncbi.geneid="")
+    species.data=c(kegg.code="ko", entrez.gnodes="0", kegg.geneid="K01488", ncbi.geneid=NA, ncbi.proteinid=NA, uniprot=NA)
     gene.idtype="KEGG"
     msg.fmt="Only KEGG ortholog gene ID is supported, make sure it looks like \"%s\"!"
     msg=sprintf(msg.fmt, species.data["kegg.geneid"])
@@ -99,7 +99,7 @@ function(
   entrez.gnodes=species.data["entrez.gnodes"]==1
   if(is.na(species.data["ncbi.geneid"])){
     if(!is.na(species.data["kegg.geneid"])){
-      msg.fmt="Only native KEGG gene ID is supported for this species,\nmake sure it looks like \"%s\"!"
+      msg.fmt="Mapping via KEGG gene ID (not Entrez) is supported for this species,\nit looks like \"%s\"!"
       msg=sprintf(msg.fmt, species.data["kegg.geneid"])
       message("Note: ", msg)
     } else{
@@ -107,20 +107,28 @@ function(
     }
   }
   if(is.null(gene.annotpkg)) gene.annotpkg=bods[match(species, bods[,3]),1]
-  if(length(grep("ENTREZ|KEGG", gene.idtype))<1 & !is.null(gene.data)){
+  if(length(grep("ENTREZ|KEGG|NCBIPROT|UNIPROT", gene.idtype))<1 & !is.null(gene.data)){
     if(is.na(gene.annotpkg)) stop("No proper gene annotation package available!")
     if(!gene.idtype %in% gene.idtype.bods[[species]]) stop("Wrong input gene ID type!")
     gene.idmap=id2eg(gd.names, category=gene.idtype, pkg.name=gene.annotpkg, unique.map=F)
     gene.data=mol.sum(gene.data, gene.idmap)
     gene.idtype="ENTREZ"
   }
-  if(gene.idtype=="ENTREZ" & !entrez.gnodes & !is.null(gene.data)){
+
+  if(gene.idtype!="KEGG" & !entrez.gnodes & !is.null(gene.data)){
+    id.type=gene.idtype
+    if(id.type=="ENTREZ") id.type="ENTREZID"
+    kid.map=names(species.data)[-c(1:2)]
+    kid.types=names(kid.map)=c("KEGG", "ENTREZID", "NCBIPROT", "UNIPROT")
+    kid.map2=gsub("[.]", "-", kid.map)
+    kid.map2["UNIPROT"]="up"
+    if(is.na(kid.map[id.type])) stop("Wrong input gene ID type for the species!")
     message("Info: Getting gene ID data from KEGG...")
-    gene.idmap=keggConv("ncbi-geneid", species)
+    gene.idmap=keggConv(kid.map2[id.type],species)
     message("Info: Done with data retrieval!")
     kegg.ids=gsub(paste(species, ":", sep=""), "", names(gene.idmap))
-    ncbi.ids=gsub("ncbi-geneid:", "", gene.idmap)
-    gene.idmap=cbind(ncbi.ids, kegg.ids)
+    in.ids=gsub(paste0(kid.map2[id.type],":"), "", gene.idmap)
+    gene.idmap=cbind(in.ids, kegg.ids)
     gene.data=mol.sum(gene.data, gene.idmap)
     gene.idtype="KEGG"
   }

@@ -4,6 +4,7 @@ sim.mol.data=function(mol.type=c("gene","gene.ko","cpd")[1], id.type=NULL, speci
   msg.fmt2="\"%s\" has only %i unique IDs!"
   set.seed(rand.seed)
 
+  species=species[1]
   if(species!="ko"){
     species.data=kegg.species.code(species, na.rm=T, code.only=FALSE)
     species=species.data["kegg.code"]
@@ -13,34 +14,49 @@ sim.mol.data=function(mol.type=c("gene","gene.ko","cpd")[1], id.type=NULL, speci
   if(mol.type=="gene"){
     if(is.null(id.type)) id.type="KEGG"
     id.type=toupper(id.type)
+    if(id.type=="ENTREZ") id.type="ENTREZID"
+      kid.map=names(species.data)[-c(1:2)]
+      kid.types=names(kid.map)=c("KEGG", "ENTREZID", "NCBIPROT", "UNIPROT")
+      kid.map2=gsub("[.]", "-", kid.map)
+      kid.map2["UNIPROT"]="up"
 
     data(bods)
     data(gene.idtype.bods)
     org19=bods[,"kegg code"]
-    
-    if(!species %in% c(org19, "ko")){
-      if(!id.type %in% c("ENTREZ","KEGG")){
+
+    kegg.mapping=F
+    if(species %in% org19){
+      if(!id.type %in% gene.idtype.bods[[species]]) kegg.mapping=T
+     } else if (species != "ko") kegg.mapping=T
+      print(kegg.mapping)
+
+    if(kegg.mapping){#!species %in% c(org19, "ko") | id.type %in% kid.types[c(1,3)]){
+      if(!id.type %in% kid.types){
         msg=sprintf(msg.fmt, id.type, species, mol.type)
         stop(msg)
       }
-      if(is.na(species.data["ncbi.geneid"])){
+      if(is.na(species.data[kid.map[id.type]])){
         if(!is.na(species.data["kegg.geneid"])){
-          msg.fmt3="Only native KEGG gene ID is supported for species \"%s\"!"
+          msg.fmt3="Only native KEGG gene ID is supported for species \"%s\"! Use KEGG ID instead."
           msg=sprintf(msg.fmt3, species)
           message("Note: ", msg)
+          id.type="KEGG"
         } else{
           msg.fmt3="Simulation is not supported for species \"%s\"!"
           msg=sprintf(msg.fmt3, species)
           stop(msg)
         }
       }
-      gid.map=keggConv("ncbi-geneid",species)
-      if(id.type=="KEGG") {
-        all.mn=gsub(paste(species, ":", sep=""), "", names(gid.map))
-      } else all.mn=gsub("ncbi-geneid:", "", gid.map)
 
+         if(id.type=="KEGG") {
+           gid.map=keggList(species)
+           all.mn=gsub(paste(species, ":", sep=""), "", names(gid.map))
+         } else {
+           gid.map=keggConv(kid.map2[id.type],species)
+           all.mn=gsub(paste0(kid.map2[id.type],":"), "", gid.map)
+         }
     } else if(species %in% org19){
-      if(id.type=="ENTREZ") id.type="ENTREZID"
+#      if(id.type=="ENTREZ") id.type="ENTREZID"
       if(id.type=="KEGG") {
         gid.map=keggConv("ncbi-geneid",species)        
         all.mn=gsub(paste(species, ":", sep=""), "", names(gid.map))
