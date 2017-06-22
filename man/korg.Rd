@@ -7,7 +7,8 @@
   annotation package
 }
 \description{
-  Data on KEGG species, including KEGG code, scientific name,
+
+  Data on KEGG species, including taxonomy IDs, KEGG code, scientific name,
   common name, corresponding gene ID types, and gene annotation package
   names in Bioconductor
 }
@@ -16,10 +17,15 @@ data(korg)
 data(bods)
 }
 \format{
-  korg is a character matrix of ~3000 rows and 6 columns. First 3 columns are KEGG species
-  code, scientific name and common name, followed columns on gene ID types used
-  for each species: entrez.gnodes ("1" or "0", whether EntrezGene is the
-  default gene ID) and representative KEGG gene ID and EntrezGene ID.
+  korg is a character matrix of ~4800 rows and 10 columns. First 5
+  columns are KEGG and NCBI taxonomy IDs, KEGG species code, scientific
+  name and common name, followed columns on gene ID types used for each
+  species: entrez.gnodes ("1" or "0", whether EntrezGene is the default
+  gene ID) and representative KEGG gene ID, NCBI or Entrez Gene ID, NCBI
+  protein and Uniprot ID. Note korg includes 4800 KEGG species (as of
+  06/2017), in the meantime, an updated version of korg is now checked
+  out from Pathview Web server each time pathview package is loaded.
+
   
   bods is a character matrix of 19 rows and 3 columns on the mapping
   between gene annotation package names in Bioconductor, common name and
