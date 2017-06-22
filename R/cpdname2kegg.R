@@ -6,6 +6,7 @@ function(in.ids){
   len.id=length(in.ids)
   kg.accs=rep(NA, len.id)
 
+  data(cpd.names)
   in.idx=in.ids  %in% cpd.names$NAME
   if(sum(in.idx)<1){
     message("Note: ", "None of the compound ids mapped to the specified type!")
