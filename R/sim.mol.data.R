@@ -28,7 +28,7 @@ sim.mol.data=function(mol.type=c("gene","gene.ko","cpd")[1], id.type=NULL, speci
     if(species %in% org19){
       if(!id.type %in% gene.idtype.bods[[species]]) kegg.mapping=T
      } else if (species != "ko") kegg.mapping=T
-      print(kegg.mapping)
+#      print(kegg.mapping)
 
     if(kegg.mapping){#!species %in% c(org19, "ko") | id.type %in% kid.types[c(1,3)]){
       if(!id.type %in% kid.types){
