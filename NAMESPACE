@@ -6,6 +6,7 @@ import(
        graph
        )
 
+
 importFrom(png, readPNG)
 importFrom(AnnotationDbi, mget)
 importFrom(utils, data, installed.packages, read.delim)
