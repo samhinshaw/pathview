@@ -5,10 +5,10 @@
     data(cpd.simtypes, package ="pathview")
 
     # Added Nov 6th, 2017.
-    korg <- read.delim(file='data/korg.tsv', sep="\t")
-    # korg = try(read.delim(file="https://pathview.uncc.edu/data/korg.tsv", sep="\t"))
+    data(korg, package ="pathview")
+    # korg = try(read.delim(file="https://pathview.uncc.edu/data/korg.tsv", sep="\t", stringsAsFactors = FALSE))
 
-    korg=as.matrix(korg)
+    korg = as.matrix(korg)
   } else {
     data(korg, package ="pathview")
   }
